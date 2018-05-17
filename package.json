@@ -1,0 +1,51 @@
+{
+    "name": "rentmap",
+    "version": "1.0.0",
+    "description": "A housing map integrated into google to determine commute distance",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kervarecht/rentmap-kervarecht.git"
+    },
+    "dependencies": {
+        "@babel/core": "^7.0.0-beta.44",
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-react": "^6.24.1",
+        "body-parser": "^1.18.2",
+        "clean-webpack-plugin": "^0.1.19",
+        "cors": "^2.8.4",
+        "css-loader": "^0.28.11",
+        "dotenv": "^5.0.1",
+        "express-session": "^1.15.6",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "mongodb": "^3.0.6",
+        "node-sass": "^4.8.3",
+        "nodemon": "^1.17.3",
+        "passport": "^0.4.0",
+        "passport-google-oauth20": "^1.0.0",
+        "passport-local": "^1.0.0",
+        "q": "^1.5.1",
+        "react": "^16.3.2",
+        "react-dom": "^16.3.2",
+        "request": "^2.85.0",
+        "sass-loader": "^7.0.1",
+        "style-loader": "^0.20.3",
+        "webpack": "^4.5.0",
+        "webpack-dev-middleware": "^3.1.2",
+        "webpack-dev-server": "^3.1.4",
+        "webpack-livereload-plugin": "^2.1.1"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kervarecht/rentmap-kervarecht/issues"
+    },
+    "homepage": "https://github.com/kervarecht/rentmap-kervarecht#readme"
+}
