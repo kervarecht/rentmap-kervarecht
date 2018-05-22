@@ -31,6 +31,7 @@ class Search extends Component {
     render(){
         return (
         <div className="Search">
+            <div className="search-title"><h2 className="search-title-header">Full Address (include either Town+State or Zip)</h2></div>
             <input className="LocationSearch" onKeyUp={this.onKeyUp} onKeyPress={this.onKeyPress}/>
             <button className="SubmitLocationSearch" onClick={this.submitLocationSearch}>Submit</button>
             </div>

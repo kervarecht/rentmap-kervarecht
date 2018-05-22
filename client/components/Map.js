@@ -9,7 +9,8 @@ class LeafletMap extends Component {
 
     componentDidMount(){
         //define map, to define specific area inject .setView([coordinates], zoom)
-        var myMap = L.map('mapid').setView([51.5, -0.09], 13);
+        
+        var myMap = L.map('mapid').setView(this.props.coordinates, 13);
         
         //adding the visual layer so see the map!
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia2VydmFyZWNodCIsImEiOiJjamhiYnFxYjMwMGl1MzBwZHZ2ZXR4c25mIn0.i_iS5UIuo8hoc16_Cboamg', {
@@ -20,7 +21,7 @@ class LeafletMap extends Component {
         }).addTo(myMap);
 
         //to add a marker
-        var marker = L.marker([51.5, -0.09]).addTo(myMap);
+        // var marker = L.marker([51.5, -0.09]).addTo(myMap);
     }
 
     render(){
