@@ -27,9 +27,10 @@ var zillow_api_call = function(address, citystatezip){
 
 //====ROUTES====//
 app.get('/search', (req, res) => {
-    console.log(req.query.value);
+
+    console.log(req.query);
     request(
-        zillow_api_call("191+Rainbow+Trail", "06066"),
+        zillow_api_call(req.query.address, req.query.zip),
         function(err, response){
             if (err) {
                console.log("Error: " + err);

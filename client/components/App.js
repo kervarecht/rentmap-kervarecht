@@ -10,19 +10,23 @@ class App extends Component {
         }
         this.submitLocationSearch = this.submitLocationSearch.bind(this);
     }
-    submitLocationSearch(value){
+
+    
+    submitLocationSearch(address, zip){
         //axios function has different scope 'this,' setting component 'this' to 'self'
         var self = this;
         axios.get('http://localhost:3000/search', 
         {params: {
-            value: value
+            address: address,
+            zip: zip
         }})
         .then(response => {
-            const newCoords = [response.latitude, response.longitude];
+            const newCoords = [response.data.latitude, response.data.longitude];
             self.setState({"coordinates": newCoords});
         })
         .catch(err => console.log(err));
     }
+
     render(){
         
         return(
