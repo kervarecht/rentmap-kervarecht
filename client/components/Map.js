@@ -5,11 +5,22 @@ class LeafletMap extends Component {
     constructor(props){
         super(props);
         this.updateView = this.updateView.bind(this);
+        this.setRoute = this.setRoute.bind(this)
     }
 
     componentWillReceiveProps(newProps){
-        console.log(newProps.coordinates);
-        this.updateView(newProps.coordinates, 14)
+        if (newProps.coordinates.length > 0 && newProps.destination.length > 0){
+            this.setRoute(newProps.coordinates, newProps.destination);
+        }
+        else if (newProps.coordinates.length > 0 && newProps.destination.length == 0){
+            this.updateView(newProps.coordinates);
+        }
+        else if (newProps.coordinates.length == 0 && newProps.destination.length > 0){
+            this.updateView(newProps.destination);
+        }
+        else {
+            console.log("No change");
+        }
     }
 
     updateView(newCoords, zoom){
@@ -18,10 +29,22 @@ class LeafletMap extends Component {
         L.marker(newCoords).addTo(this.myMap);
     }
 
+    setRoute(origin, destination){
+        L.Routing.control({
+            waypoints: [
+              L.latLng(origin[0], origin[1]),
+              L.latLng(destination[0], destination[1])
+            ]
+          }).addTo(this.myMap);
+    }
+
     componentDidMount(){
         //define map, to define specific area inject .setView([coordinates], zoom)
         
-        this.myMap = L.map('mapid').setView(this.props.coordinates, 13);
+        this.myMap = L.map('mapid').setView([41.68, -72.545], 13);
+        this.setState({
+            "coordinates": [41.68, -72.545]
+        })
         
         //adding the visual layer so see the map!
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia2VydmFyZWNodCIsImEiOiJjamhiYnFxYjMwMGl1MzBwZHZ2ZXR4c25mIn0.i_iS5UIuo8hoc16_Cboamg', {
