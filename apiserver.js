@@ -35,35 +35,48 @@ const geocoder = NodeGeocoder(options);
 
 //====ROUTES====//
 app.get('/search', (req, res) => {
+    //Separation of concerns vs efficiency, how many API calls in this route
+    //vs send back to front-end and push Zillow API request from there?
 
-    request(
-        zillow_api_call(req.query.address, req.query.zip),
-        function(err, response){
-            if (err) {
-               console.log("Error: " + err);
-            }
-        console.log(response);
-        //Zillow's API response is in XML and is a pain to handle
-        parseString(response.body, {explicitArray: false}, function(err, result){
-            if (err) {
-                console.log(err);
-            }
-            const parsedResponse = {
-                latitude: Number(result["SearchResults:searchresults"].response.results.result.address.latitude),
-                longitude: Number(result["SearchResults:searchresults"].response.results.result.address.longitude),
-                street_address: result["SearchResults:searchresults"].response.results.result.address.street,
-                zipcode: result["SearchResults:searchresults"].response.results.result.address.zipcode,
-                zestimate: result["SearchResults:searchresults"].response.results.result.zestimate.amount._,
-                zpid: result["SearchResults:searchresults"].response.results.result.zpid
-            }
-            for (var x in parsedResponse){
-                if (parsedResponse[x] == undefined){
-                    parsedResponse[x] = null;
+    //Query Google geocoder
+    geocoder.geocode(req.query.address, function(err, geo){
+        if (err){
+            console.log(err)
+        }
+        console.log(geo);
+        const address = geo[0].streetNumber + " " + geo[0].streetName;
+        const zipcode = geo[0].zipcode
+        //query Zillow API with Google Geocoder response
+        request(
+            zillow_api_call(address, zipcode),
+            function(err, response){
+                if (err) {
+                   console.log("Zillow API call error: " + err);
                 }
-            }
-            res.send(parsedResponse);
+            //console.log(response);
+            //Zillow's API response is in XML and is a pain to handle
+            parseString(response.body, {explicitArray: false}, function(err, result){
+                if (err) {
+                    console.log(err);
+                }
+                const parsedResponse = {
+                    latitude: Number(geo[0].latitude),
+                    longitude: Number(geo[0].longitude),
+                    street_address: geo[0].formattedAddress,
+                    zipcode: geo[0].zipcode,
+                    zestimate: result["SearchResults:searchresults"].response.results.result.zestimate.amount._,
+                    zpid: result["SearchResults:searchresults"].response.results.result.zpid
+                }
+                for (var x in parsedResponse){
+                    if (parsedResponse[x] == undefined){
+                        parsedResponse[x] = null;
+                    }
+                }
+                res.send(parsedResponse);
+            })
         })
-    })
+    });
+    
 });
 
 app.get('/destination', (req, res) => {

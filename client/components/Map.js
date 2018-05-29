@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import L from 'leaflet';
+import 'leaflet-routing-machine'; //hopefully adding L.Routing.control
 
 class LeafletMap extends Component {
     constructor(props){
@@ -30,7 +31,13 @@ class LeafletMap extends Component {
     }
 
     setRoute(origin, destination){
-        L.Routing.control({
+        //Find a way to clear route IF route has been set, maybe using setWaypoints([]) or removeControl()
+        if (route){
+            this.myMap.removeControl(route);
+        }
+        //find a way to set switch between imperial and metric
+        var route = L.Routing.control({
+            units: 'imperial',
             waypoints: [
               L.latLng(origin[0], origin[1]),
               L.latLng(destination[0], destination[1])
@@ -40,7 +47,6 @@ class LeafletMap extends Component {
 
     componentDidMount(){
         //define map, to define specific area inject .setView([coordinates], zoom)
-        
         this.myMap = L.map('mapid').setView([41.68, -72.545], 13);
         this.setState({
             "coordinates": [41.68, -72.545]

@@ -26,13 +26,12 @@ class App extends Component {
         })
     }
     
-    submitLocationSearch(address, zip){
+    submitLocationSearch(address){
         //axios function has different scope 'this,' setting component 'this' to 'self'
         var self = this;
         axios.get('http://localhost:3000/search', 
         {params: {
-            address: address,
-            zip: zip
+            address: address
         }})
         .then(response => {
             console.log(response.data);
