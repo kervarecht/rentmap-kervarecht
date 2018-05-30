@@ -25,16 +25,14 @@ class LeafletMap extends Component {
     }
 
     updateView(newCoords, zoom){
-        console.log(newCoords, zoom);
+        //console.log(newCoords, zoom);
         this.myMap.setView(newCoords, zoom);
         L.marker(newCoords).addTo(this.myMap);
     }
 
     setRoute(origin, destination){
         //Find a way to clear route IF route has been set, maybe using setWaypoints([]) or removeControl()
-        if (route){
-            this.myMap.removeControl(route);
-        }
+        
         //find a way to set switch between imperial and metric
         var route = L.Routing.control({
             units: 'imperial',
@@ -42,7 +40,15 @@ class LeafletMap extends Component {
               L.latLng(origin[0], origin[1]),
               L.latLng(destination[0], destination[1])
             ]
-          }).addTo(this.myMap);
+          }).addTo(this.myMap)
+
+        // Not currently finding previous route to remove
+        //  this.props.setDistance(route._routes[0].summary.totalDistance);
+        
+        //set distance in top-level app component
+        console.log(route);
+
+        console.log(this.myMap);
     }
 
     componentDidMount(){
