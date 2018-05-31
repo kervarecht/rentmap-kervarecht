@@ -53,19 +53,31 @@ app.get('/search', (req, res) => {
                 if (err) {
                    console.log("Zillow API call error: " + err);
                 }
-            //console.log(response);
             //Zillow's API response is in XML and is a pain to handle
+            //If Zillow returns no data function sends an error message + Google Geo data
+            //So the app can still route to the requested property
             parseString(response.body, {explicitArray: false}, function(err, result){
                 if (err) {
                     console.log(err);
+                }
+                let zestimate;
+                let zpid;
+                console.log(result);
+                if (result.response){
+                    zestimate = result["SearchResults:searchresults"].response.results.result.zestimate.amount._;
+                    zpid = result["SearchResults:searchresults"].response.results.result.zpid;
+                }
+                else {
+                    zestimate = "Estimate not found";
+                    zpid = "ID Not found";
                 }
                 const parsedResponse = {
                     latitude: Number(geo[0].latitude),
                     longitude: Number(geo[0].longitude),
                     street_address: geo[0].formattedAddress,
                     zipcode: geo[0].zipcode,
-                    zestimate: result["SearchResults:searchresults"].response.results.result.zestimate.amount._,
-                    zpid: result["SearchResults:searchresults"].response.results.result.zpid
+                    zestimate: zestimate,
+                    zpid: zpid
                 }
                 for (var x in parsedResponse){
                     if (parsedResponse[x] == undefined){

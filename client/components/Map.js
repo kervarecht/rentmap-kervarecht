@@ -7,6 +7,9 @@ class LeafletMap extends Component {
         super(props);
         this.updateView = this.updateView.bind(this);
         this.setRoute = this.setRoute.bind(this)
+        this.state = {
+            "route": null
+        }
     }
 
     componentWillReceiveProps(newProps){
@@ -31,24 +34,27 @@ class LeafletMap extends Component {
     }
 
     setRoute(origin, destination){
-        //Find a way to clear route IF route has been set, maybe using setWaypoints([]) or removeControl()
+        //Using state to track route variable across initializations
+        //User can change waypoints dynamically and route will update
+        if (this.state.route){
+            this.myMap.removeControl(this.state.route);
+        }
+        let route;
         
-        //find a way to set switch between imperial and metric
-        var route = L.Routing.control({
+        //set switch between imperial and metric (default is metric)
+        route = L.Routing.control({
             units: 'imperial',
             waypoints: [
               L.latLng(origin[0], origin[1]),
               L.latLng(destination[0], destination[1])
             ]
           }).addTo(this.myMap)
-
-        // Not currently finding previous route to remove
+        this.setState({"route": route});
+        console.log(route);
+        // Find route ditance to pass to parent for Info display
         //  this.props.setDistance(route._routes[0].summary.totalDistance);
         
         //set distance in top-level app component
-        console.log(route);
-
-        console.log(this.myMap);
     }
 
     componentDidMount(){
