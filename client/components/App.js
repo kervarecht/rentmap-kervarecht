@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Search from "./Search";
 import LeafletMap from './Map'
-import ZillowInfoComponent from './ZillowInfoComponent';
+import ZillowInfo from './ZillowInfoComponent';
 
 class App extends Component {
     constructor(props){
@@ -9,13 +9,15 @@ class App extends Component {
         this.state = {
             "coordinates" : [],
             "destination": [],
-            "address": "",
-            "zipcode": "",
-            "destinationAddress": "",
-            "distance": ""
+            "address": null,
+            "destinationAddress": null,
+            "zestimate": null,
+            "distance": null,
+            "duration": null
         }
         this.submitLocationSearch = this.submitLocationSearch.bind(this);
         this.submitDestinationSearch = this.submitDestinationSearch.bind(this);
+        this.setDistance = this.setDistance.bind(this);
     }
 
     submitDestinationSearch(destination){
@@ -25,9 +27,9 @@ class App extends Component {
             {destination: destination}})
         .then(response => {
             const destCoords = [response.data["0"].latitude, response.data["0"].longitude];
-            console.log(response.data);
+            //console.log(response.data);
             self.setState({"destination": destCoords,
-                    "destinationAddress": response.data["0"].address});
+                    "destinationAddress": response.data["0"].formattedAddress});
         })
     }
     
@@ -39,31 +41,26 @@ class App extends Component {
             address: address
         }})
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             const newCoords = [response.data.latitude, response.data.longitude];
             self.setState({"coordinates": newCoords,
-                            "address": response.data.address,
+                            "address": response.data.street_address,
                             "zestimate": response.data.zestimate});
         })
         .catch(err => console.log(err));
     }
 
-    setDistance(distance){
-        this.setState({"distance": distance});
+    setDistance(settings){
+        this.setState(settings);
     }
 
     render(){
         
-        return(
+        return (
             <div className="App">
                 <Search submitLocationSearch={this.submitLocationSearch} submitDestinationSearch={this.submitDestinationSearch} />
                 <LeafletMap coordinates={this.state.coordinates} destination={this.state.destination} setDistance={this.setDistance}/>
-                <ZillowInfoComponent 
-                    address={this.state.address}
-                    zipcode={this.state.zipcode}
-                    destination={this.state.destinationAddress}
-                    distance={this.state.distance}
-                    />
+                <ZillowInfo address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
             </div>
         )    
     }

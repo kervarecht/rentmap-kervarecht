@@ -63,7 +63,7 @@ app.get('/search', (req, res) => {
                 let zestimate;
                 let zpid;
                 console.log(result);
-                if (result.response){
+                if (result["SearchResults:searchresults"].response){
                     zestimate = result["SearchResults:searchresults"].response.results.result.zestimate.amount._;
                     zpid = result["SearchResults:searchresults"].response.results.result.zpid;
                 }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import L from 'leaflet';
-import 'leaflet-routing-machine'; //hopefully adding L.Routing.control
+import 'leaflet-routing-machine'; //adding L.Routing.control
+import axios from 'axios';
+
 
 class LeafletMap extends Component {
     constructor(props){
@@ -8,13 +10,21 @@ class LeafletMap extends Component {
         this.updateView = this.updateView.bind(this);
         this.setRoute = this.setRoute.bind(this)
         this.state = {
-            "route": null
+            "origin": null,
+            "destination": null
         }
     }
 
     componentWillReceiveProps(newProps){
-        if (newProps.coordinates.length > 0 && newProps.destination.length > 0){
+        if (newProps.coordinates == this.state.origin && newProps.destination == this.state.destination){
+            console.log("Coordinates unchanged");
+        }
+        else if (newProps.coordinates.length > 0 && newProps.destination.length > 0){
             this.setRoute(newProps.coordinates, newProps.destination);
+            var origin = newProps.coordinates
+            var destination = newProps.destination;
+            this.setState({"origin" : origin,
+            "destination": destination})
         }
         else if (newProps.coordinates.length > 0 && newProps.destination.length == 0){
             this.updateView(newProps.coordinates);
@@ -40,7 +50,6 @@ class LeafletMap extends Component {
             this.myMap.removeControl(this.state.route);
         }
         let route;
-        
         //set switch between imperial and metric (default is metric)
         route = L.Routing.control({
             units: 'imperial',
@@ -49,13 +58,29 @@ class LeafletMap extends Component {
               L.latLng(destination[0], destination[1])
             ]
           }).addTo(this.myMap)
-        this.setState({"route": route});
-        console.log(route);
-        // Find route ditance to pass to parent for Info display
-        //  this.props.setDistance(route._routes[0].summary.totalDistance);
-        
-        //set distance in top-level app component
+        //console.log(route);
+          var url = function(originLng, originLat, destLng, destLat){
+              var base = 'http://router.project-osrm.org/route/v1/driving/'
+              var end = '?overview=false';
+              return base + originLat + ',' + originLng + ';' + destLat + ',' + destLng + end;
+          }
+        //grab distance
+        console.log("Url: " + url(origin[0], origin[1], destination[0], destination[1]));
+        axios.get(url(origin[0], origin[1], destination[0], destination[1])).then((response, err) => {
+          if (err){
+              console.log(err);
+          }
+          console.log(response);
+          var settings = {
+            "distance": response.data.routes[0].distance,
+            "duration": response.data.routes[0].duration
+          }
+
+          this.props.setDistance(settings)
+        })
     }
+    
+          
 
     componentDidMount(){
         //define map, to define specific area inject .setView([coordinates], zoom)
@@ -64,7 +89,7 @@ class LeafletMap extends Component {
             "coordinates": [41.68, -72.545]
         })
         
-        //adding the visual layer so see the map!
+        //adding the visual layer to see the map!
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia2VydmFyZWNodCIsImEiOiJjamhiYnFxYjMwMGl1MzBwZHZ2ZXR4c25mIn0.i_iS5UIuo8hoc16_Cboamg', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
