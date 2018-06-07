@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Search from "./Search";
 import LeafletMap from './Map'
 import ZillowInfo from './ZillowInfoComponent';
+import CarHUD from './CarHUD';
 
 class App extends Component {
     constructor(props){
@@ -61,6 +62,7 @@ class App extends Component {
                 <Search submitLocationSearch={this.submitLocationSearch} submitDestinationSearch={this.submitDestinationSearch} />
                 <LeafletMap coordinates={this.state.coordinates} destination={this.state.destination} setDistance={this.setDistance}/>
                 <ZillowInfo address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
+                <CarHUD />
             </div>
         )    
     }

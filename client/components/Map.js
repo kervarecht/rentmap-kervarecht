@@ -10,6 +10,7 @@ class LeafletMap extends Component {
         this.updateView = this.updateView.bind(this);
         this.setRoute = this.setRoute.bind(this)
         this.state = {
+            "route": null,
             "origin": null,
             "destination": null
         }
@@ -46,11 +47,11 @@ class LeafletMap extends Component {
     setRoute(origin, destination){
         //Using state to track route variable across initializations
         //User can change waypoints dynamically and route will update
+        //Check previous 
         if (this.state.route){
             this.myMap.removeControl(this.state.route);
         }
         let route;
-        //set switch between imperial and metric (default is metric)
         route = L.Routing.control({
             units: 'imperial',
             waypoints: [
@@ -58,6 +59,14 @@ class LeafletMap extends Component {
               L.latLng(destination[0], destination[1])
             ]
           }).addTo(this.myMap)
+        
+        this.setState({"route": route}) //sets route to state so next time function is called previous route can be removed
+
+        //center map on route
+        var center = [(origin[0] - destination[0])/2, (origin[1] + destination[1])/2]
+        var routeZoom = Math.abs(center[0] - origin[0]);
+        this.myMap.setView(center, routeZoom);  
+
         //console.log(route);
           var url = function(originLng, originLat, destLng, destLat){
               var base = 'http://router.project-osrm.org/route/v1/driving/'
