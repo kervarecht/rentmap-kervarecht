@@ -115,7 +115,7 @@ app.get('/destination', (req, res) => {
 app.get('/vehicle', (req, res) => {
     const make = req.query.make;
     const year = req.query.year;
-    const sqlFunction = "SELECT model FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\";"
+    const sqlFunction = "SELECT model, ROUND(AVG(city_mpg), 0) AS city_mpg, ROUND(AVG(comb_mpg), 0) AS comb_mpg, ROUND(AVG(highway_mpg), 0) AS highway_mpg, fuel_type FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\"GROUP BY model";
     db.all(sqlFunction, function(err, result){
         if (err){
             console.log(err);
