@@ -7,17 +7,36 @@ var makes = ["AM General","ASC Incorporated","Acura","Alfa Romeo","American Moto
 class CarSearch extends Component {
     constructor(props){
         super(props);
+        this.handleMakeChange = this.handleMakeChange.bind(this);
+        this.handleYearChange = this.handleYearChange.bind(this);
+        this.getCar = this.getCar.bind(this);
         this.state = {
             "years": years,
-            "makes": makes
+            "makes": makes,
+            "selectedYear": 1984,
+            "selectedMake": "AM General"
         }
+    }
+
+    handleMakeChange(e){
+        this.setState({"selectedMake": e.target.value});
+    }
+
+    handleYearChange(e){
+        this.setState({"selectedYear": e.target.value});
+    }
+
+    getCar(){
+        //get value from map and year options in CarSearch, sent get request to server to get info for models
+        this.props.submitCarSearch(this.state.selectedYear, this.state.selectedMake);
     }
 
     render(){
         return (
             <div className="CarSearch">
-                <select>{this.state.years.map(year => <option value={year.toString()}>{year.toString()}</option>)}</select>
-                <select>{this.state.makes.map(make => <option value={make}>{make}</option>)}</select>
+                <select onChange={this.handleYearChange}>{this.state.years.map(year => <option value={year.toString()}>{year.toString()}</option>)}</select>
+                <select onChange={this.handleMakeChange}>{this.state.makes.map(make => <option value={make}>{make}</option>)}</select>
+                <button onClick={this.getCar}>Get Info</button>
             </div>
         )
     }

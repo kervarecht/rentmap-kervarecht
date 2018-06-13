@@ -7,7 +7,7 @@ const NodeGeocoder = require('node-geocoder');
 const passport = require('passport');
 const parseString = require('xml2js').parseString;
 const request = require('request');
-
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 
@@ -15,6 +15,15 @@ const app = express();
 app.use(cors());
 app.use(bodyparser.urlencoded({"extended": true}));
 app.use(bodyparser.json());
+
+
+//===SQL DB CONFIG===//
+var db = new sqlite3.Database('./hypermiler.db', (err) => {
+    if (err){
+        console.log(err);
+    }
+    console.log("Connected to database");
+});
 
 
 //===ZILLOW API CONFIG===//
@@ -103,7 +112,21 @@ app.get('/destination', (req, res) => {
 
 });
 
-
+app.get('/vehicle', (req, res) => {
+    const make = req.query.make;
+    const year = req.query.year;
+    const sqlFunction = "SELECT model FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\";"
+    db.all(sqlFunction, function(err, result){
+        if (err){
+            console.log(err);
+        }
+        console.log(result);
+        res.send(result);
+    });
+    
+    db.close();
+  
+})
 
 
 
