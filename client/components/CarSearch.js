@@ -9,12 +9,16 @@ class CarSearch extends Component {
         super(props);
         this.handleMakeChange = this.handleMakeChange.bind(this);
         this.handleYearChange = this.handleYearChange.bind(this);
+        this.handleModelChange = this.handleModelChange.bind(this);
         this.getCar = this.getCar.bind(this);
+        this.getFuel = this.getFuel.bind(this);
         this.state = {
             "years": years,
             "makes": makes,
             "selectedYear": 1984,
-            "selectedMake": "AM General"
+            "selectedMake": "AM General",
+            "models": [],
+            "selectedModel": null
         }
     }
 
@@ -25,10 +29,26 @@ class CarSearch extends Component {
     handleYearChange(e){
         this.setState({"selectedYear": e.target.value});
     }
-
+    handleModelChange(e){
+        this.setState({"selectedModel": e.target.value});
+    }
     getCar(){
         //get value from map and year options in CarSearch, sent get request to server to get info for models
-        this.props.submitCarSearch(this.state.selectedYear, this.state.selectedMake);
+        //map models to array, set this.state.models to array
+        //binding self to this because axios changing binding
+        var self = this;
+        this.props.submitCarSearch(this.state.selectedYear, this.state.selectedMake, function(response){
+            const models = response.map(object => {
+                return object.model;
+            })
+            console.log(models);
+            self.setState({"models": models,
+            "selectedModel": models[0]});
+        });
+    }
+
+    getFuel(){
+        this.props.submitFuelSearch(this.state.selectedYear, this.state.selectedMake, this.state.selectedModel);
     }
 
     render(){
@@ -37,6 +57,8 @@ class CarSearch extends Component {
                 <select onChange={this.handleYearChange}>{this.state.years.map(year => <option value={year.toString()}>{year.toString()}</option>)}</select>
                 <select onChange={this.handleMakeChange}>{this.state.makes.map(make => <option value={make}>{make}</option>)}</select>
                 <button onClick={this.getCar}>Get Info</button>
+                <select onChange={this.handleModelChange}>{this.state.models.map(model => <option value={model}>{model}</option>)}</select>
+                <button onClick={this.getFuel}>Get MPG Info</button>
             </div>
         )
     }

@@ -10,6 +10,10 @@ class ZillowInfo extends Component {
         this.inDistance = this.inDistance.bind(this);
     }
 
+    componentWillReceiveProps(newProps){
+        console.log(newProps);
+    }
+
     inMinutes(time){
         var minutes = Math.round(time / 60);
         if (minutes > 60){
@@ -20,12 +24,22 @@ class ZillowInfo extends Component {
         }
     }
 
-    inDistance(units){
+    inDistanceUnits(units){
         if (this.state.imperial == true){
             return (Math.round(units / 160) / 10) + " miles"; //allow 1 decimal point to distance
         }
         else {
             return (Math.round(units / 100) / 10) + " km";
+        }
+    }
+
+    inDistance(units){
+        //like above but no string to allow calc on component
+        if (this.state.imperial == true){
+            return (Math.round(units / 160) / 10);
+        }
+        else {
+            return (Math.round(units / 100) / 10);
         }
     }
 
@@ -35,8 +49,10 @@ class ZillowInfo extends Component {
                 <p className="HomeFullAddress">Address: {this.props.address}</p>
                 <p className="Zestimate">Estimated Price: {this.props.zestimate}</p>
                 <p className="DestinationFullAddress">Destination: {this.props.destination}</p>
-                <p className="Distance">Distance: {this.inDistance(this.props.distance)}</p>
+                <p className="Distance">Distance: {this.inDistanceUnits(this.props.distance)}</p>
                 <p className="Duration">Trip Time: {this.inMinutes(this.props.duration)} </p>
+                <p className="CombMPG">MPG/Gallons per week: {this.props.comb_mpg} / {(this.inDistance(this.props.distance) * 10) / this.props.comb_mpg}</p>
+                <p className="FuelType">Fuel Type: {this.props.fuel_type}</p>
                 </div>
         )
     }

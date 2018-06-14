@@ -14,10 +14,13 @@ class App extends Component {
             "destinationAddress": null,
             "zestimate": null,
             "distance": null,
-            "duration": null
+            "duration": null,
+            "comb_mpg": null,
+            "fuel_type": null
         }
         this.submitLocationSearch = this.submitLocationSearch.bind(this);
         this.submitDestinationSearch = this.submitDestinationSearch.bind(this);
+        this.setCar = this.setCar.bind(this);
         this.setDistance = this.setDistance.bind(this);
     }
 
@@ -55,14 +58,22 @@ class App extends Component {
         this.setState(settings);
     }
 
+    setCar(mpg, fuel){
+        console.log("setCar function called");
+        this.setState({
+            "comb_mpg": mpg,
+            "fuel_type": fuel
+        })
+    }
+
     render(){
         
         return (
             <div className="App">
                 <Search submitLocationSearch={this.submitLocationSearch} submitDestinationSearch={this.submitDestinationSearch} />
                 <LeafletMap coordinates={this.state.coordinates} destination={this.state.destination} setDistance={this.setDistance}/>
-                <ZillowInfo address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
-                <CarHUD />
+                <ZillowInfo comb_mpg={this.state.comb_mpg} fuel_type={this.state.fuel_type} address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
+                <CarHUD setCar={this.setCar}/>
             </div>
         )    
     }

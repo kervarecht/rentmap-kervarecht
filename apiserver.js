@@ -115,7 +115,7 @@ app.get('/destination', (req, res) => {
 app.get('/vehicle', (req, res) => {
     const make = req.query.make;
     const year = req.query.year;
-    const sqlFunction = "SELECT model, ROUND(AVG(city_mpg), 0) AS city_mpg, ROUND(AVG(comb_mpg), 0) AS comb_mpg, ROUND(AVG(highway_mpg), 0) AS highway_mpg, fuel_type FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\"GROUP BY model";
+    const sqlFunction = "SELECT model FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\"GROUP BY model";
     db.all(sqlFunction, function(err, result){
         if (err){
             console.log(err);
@@ -124,10 +124,24 @@ app.get('/vehicle', (req, res) => {
         res.send(result);
     });
     
-    db.close();
   
 })
 
+app.get('/mpgdata', (req, res) => {
+    const make = req.query.make;
+    const year = req.query.year;
+    const model = req.query.model;
+    console.log(make, year, model);
 
+    const sqlFunction = "SELECT ROUND(AVG(comb_mpg), 0) AS comb_mpg, fuel_type FROM vehicles WHERE year = " + year + " AND model = \"" + model + "\" AND make = \"" + make + "\";";
+
+    db.all(sqlFunction, function(err, result){
+        if (err){
+            console.log(err);
+        }
+        console.log(result);
+        res.send(result[0]);
+    })
+})
 
 app.listen(3000, console.log("Listening on port 3000"));
