@@ -45,13 +45,15 @@ class App extends Component {
             address: address
         }})
         .then(response => {
-            //console.log(response.data);
+            console.log(response.data);
             const newCoords = [response.data.latitude, response.data.longitude];
             self.setState({"coordinates": newCoords,
                             "address": response.data.street_address,
                             "zestimate": response.data.zestimate});
         })
         .catch(err => console.log(err));
+
+        
     }
 
     setDistance(settings){
