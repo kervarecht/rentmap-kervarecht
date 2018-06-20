@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import '../styles/ZillowInfoComponent.scss';
 
 class ZillowInfo extends Component {
     constructor(props){

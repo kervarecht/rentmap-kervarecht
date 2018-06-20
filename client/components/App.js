@@ -73,9 +73,9 @@ class App extends Component {
         return (
             <div className="App">
                 <Search submitLocationSearch={this.submitLocationSearch} submitDestinationSearch={this.submitDestinationSearch} />
+                <CarHUD setCar={this.setCar}/>
                 <LeafletMap coordinates={this.state.coordinates} destination={this.state.destination} setDistance={this.setDistance}/>
                 <ZillowInfo comb_mpg={this.state.comb_mpg} fuel_type={this.state.fuel_type} address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
-                <CarHUD setCar={this.setCar}/>
             </div>
         )    
     }
