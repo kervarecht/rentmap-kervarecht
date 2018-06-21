@@ -1,9 +1,4 @@
-#mapid {
-    height: 300px;
-}
-
-body {
-    align-content: center;
-    background-image: url('https://images.unsplash.com/photo-1471479917193-f00955256257?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=277e06c05754d2c22a90ea8c242a82df&auto=format&fit=crop&w=1448&q=80');
-    background-size: cover;
-}
+    #mapid {
+        height: 80vh;
+        max-height: 350px;
+    }

@@ -16,12 +16,43 @@ class App extends Component {
             "distance": null,
             "duration": null,
             "comb_mpg": null,
-            "fuel_type": null
+            "fuel_type": null,
+            "fuel_price": null
         }
         this.submitLocationSearch = this.submitLocationSearch.bind(this);
         this.submitDestinationSearch = this.submitDestinationSearch.bind(this);
         this.setCar = this.setCar.bind(this);
         this.setDistance = this.setDistance.bind(this);
+        this.getFuelPrice = this.getFuelPrice.bind(this);
+    }
+
+    getFuelPrice(coordinates, fuelType){
+        console.log("getFuelPrice called.")
+        console.log(fuelType);
+        var self=this;
+        if (this.state.fuel_type == null || this.state.coordinates == null){
+          console.log("Some value null");
+        }
+        else {
+        axios.get('http://localhost:3000/fuelprice', {
+            params : {
+            coordinates: coordinates,
+            fuel_type: fuelType
+        }})
+        .then(response => {
+            if (response.data == false){
+                console.log(response.data);
+                console.log("Breaking");
+            }
+            else{
+            console.log(response.data);
+            self.setState({"fuel_price": response.data.fuel_price})
+        }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        }
     }
 
     submitDestinationSearch(destination){
@@ -49,7 +80,10 @@ class App extends Component {
             const newCoords = [response.data.latitude, response.data.longitude];
             self.setState({"coordinates": newCoords,
                             "address": response.data.street_address,
-                            "zestimate": response.data.zestimate});
+                            "zestimate": response.data.zestimate},
+                            () => {
+                                self.getFuelPrice(this.state.coordinates, this.state.fuel_type);
+                            });
         })
         .catch(err => console.log(err));
 
@@ -65,6 +99,9 @@ class App extends Component {
         this.setState({
             "comb_mpg": mpg,
             "fuel_type": fuel
+        },
+        () => {
+            this.getFuelPrice(this.state.coordinates, this.state.fuel_type);
         })
     }
 
@@ -75,7 +112,7 @@ class App extends Component {
                 <Search submitLocationSearch={this.submitLocationSearch} submitDestinationSearch={this.submitDestinationSearch} />
                 <CarHUD setCar={this.setCar}/>
                 <LeafletMap coordinates={this.state.coordinates} destination={this.state.destination} setDistance={this.setDistance}/>
-                <ZillowInfo comb_mpg={this.state.comb_mpg} fuel_type={this.state.fuel_type} address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
+                <ZillowInfo fuel_price={this.state.fuel_price} comb_mpg={this.state.comb_mpg} fuel_type={this.state.fuel_type} address={this.state.address} destination={this.state.destinationAddress} distance={this.state.distance} duration={this.state.duration} zestimate={this.state.zestimate}/>
             </div>
         )    
     }

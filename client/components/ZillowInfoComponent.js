@@ -9,6 +9,7 @@ class ZillowInfo extends Component {
         }
         this.inMinutes = this.inMinutes.bind(this);
         this.inDistance = this.inDistance.bind(this);
+        this.perWeek = this.perWeek.bind(this);
     }
 
     componentWillReceiveProps(newProps){
@@ -44,6 +45,10 @@ class ZillowInfo extends Component {
         }
     }
 
+    perWeek(distance, price){
+        return "$" + Math.round(this.inDistance(distance) * price * 10) / 10;
+    }
+
     render(){
         return (
             <div className="ZillowInfo">
@@ -54,6 +59,7 @@ class ZillowInfo extends Component {
                 <p className="Duration">Trip Time: {this.inMinutes(this.props.duration)} </p>
                 <p className="CombMPG">MPG/Gallons per week: {this.props.comb_mpg} / {(this.inDistance(this.props.distance) * 10) / this.props.comb_mpg}</p>
                 <p className="FuelType">Fuel Type: {this.props.fuel_type}</p>
+                <p className="FuelPrice">Fuel Price per gallon/per week: {this.props.fuel_price} / {this.perWeek(this.props.distance, this.props.fuel_price)}</p>
                 </div>
         )
     }

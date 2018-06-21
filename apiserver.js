@@ -41,6 +41,24 @@ const options = {
 }
 const geocoder = NodeGeocoder(options);
 
+//===myGasFeed CONFIG===//
+const getPrice = function(coordinates, fuel_type){
+    console.log(fuel_type);
+    let type;
+    if (fuel_type.includes("Regular")){
+        type = 'reg';
+    }
+    else if (fuel_type.includes("Premium")){
+        type = "pre";
+    }
+    else if (fuel_type.includes("Diesel")){
+        type = "diesel";
+    }
+    else if (fuel_type.includes("Midgrade")){
+        type = "mid";
+    }
+    return 'http://api.mygasfeed.com/stations/radius/' + coordinates[0] + '/' + coordinates[1] + '/5/' + type + '/distance/' + process.env.MY_GAS_FEED_API_KEY + '.json?';
+}
 
 //====ROUTES====//
 app.get('/search', (req, res) => {
@@ -115,7 +133,7 @@ app.get('/destination', (req, res) => {
 app.get('/vehicle', (req, res) => {
     const make = req.query.make;
     const year = req.query.year;
-    const sqlFunction = "SELECT model FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\"GROUP BY model";
+    const sqlFunction = "SELECT model, fuel_type FROM vehicles WHERE year = " + year + " AND make = \"" + make + "\"GROUP BY model";
     db.all(sqlFunction, function(err, result){
         if (err){
             console.log(err);
@@ -123,8 +141,24 @@ app.get('/vehicle', (req, res) => {
         console.log(result);
         res.send(result);
     });
+});
+
+app.get('/fuelprice', (req, res) => {
+    const coordinates = req.query.coordinates;
+    const fuel_type = req.query.fuel_type;
     
-  
+    if (!coordinates || !fuel_type){
+        res.send(false);
+    }
+    else {
+        console.log(getPrice(coordinates, fuel_type));
+        request(getPrice(coordinates, fuel_type), function(err, response){
+            if (err){
+                console.log("Err: " + err);
+            }
+            console.log(response);
+        })
+    }
 })
 
 app.get('/mpgdata', (req, res) => {
