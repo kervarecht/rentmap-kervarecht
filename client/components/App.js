@@ -24,6 +24,7 @@ class App extends Component {
         this.setCar = this.setCar.bind(this);
         this.setDistance = this.setDistance.bind(this);
         this.getFuelPrice = this.getFuelPrice.bind(this);
+        this.defineType = this.defineType.bind(this);
     }
 
     getFuelPrice(coordinates, fuelType){
@@ -45,14 +46,31 @@ class App extends Component {
                 console.log("Breaking");
             }
             else{
-            console.log(response.data);
-            self.setState({"fuel_price": response.data.fuel_price})
+            const json = JSON.parse(response.data.body);
+            const fuel = self.defineType(this.state.fuel_type);
+            const price = json.stations[0][fuel]
+            self.setState({"fuel_price": price})
         }
         })
         .catch(error => {
             console.log(error);
         })
         }
+    }
+
+    defineType(fuelType){
+            if (fuelType.includes("Regular")){
+                return "reg_price"
+            }
+            else if (fuelType.includes("Premium")){
+                return "pre_price";
+            }
+            else if (fuelType.includes("Diesel")){
+                return "diesel_price";
+            }
+            else if (fuelType.includes("Midgrade")){
+                return "mid_price";
+            }
     }
 
     submitDestinationSearch(destination){

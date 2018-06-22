@@ -91,8 +91,8 @@ app.get('/search', (req, res) => {
                 let zpid;
                 console.log(result);
                 if (result["SearchResults:searchresults"].response){
-                    zestimate = result["SearchResults:searchresults"].response.results.result.zestimate.amount._;
-                    zpid = result["SearchResults:searchresults"].response.results.result.zpid;
+                    zestimate = result["SearchResults:searchresults"].response.results.result.zestimate.amount._ ? result["SearchResults:searchresults"].response.results.result.zestimate.amount._ : "Estimate not found.";
+                    zpid = result["SearchResults:searchresults"].response.results.result.zpid ? result["SearchResults:searchresults"].response.results.result.zpid : "ID not found";
                 }
                 else {
                     zestimate = "Estimate not found";
@@ -157,6 +157,7 @@ app.get('/fuelprice', (req, res) => {
                 console.log("Err: " + err);
             }
             console.log(response);
+            res.send(response)
         })
     }
 })
