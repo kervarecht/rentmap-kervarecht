@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import L from 'leaflet';
 import 'leaflet-routing-machine'; //adding L.Routing.control
 import axios from 'axios';
+import '../styles/Map.scss';
 
 
 class LeafletMap extends Component {

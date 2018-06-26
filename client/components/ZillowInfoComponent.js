@@ -51,7 +51,7 @@ class ZillowInfo extends Component {
 
     render(){
         return (
-            <div className="ZillowInfo">
+            <div className="ZillowInfo app-block">
                 <p className="HomeFullAddress">Address: {this.props.address}</p>
                 <p className="Zestimate">Estimated Price: {this.props.zestimate}</p>
                 <p className="DestinationFullAddress">Destination: {this.props.destination}</p>

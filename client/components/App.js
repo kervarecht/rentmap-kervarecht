@@ -3,6 +3,7 @@ import Search from "./Search";
 import LeafletMap from './Map'
 import ZillowInfo from './ZillowInfoComponent';
 import CarHUD from './CarHUD';
+import '../styles/App.scss'
 
 class App extends Component {
     constructor(props){

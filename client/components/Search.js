@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import '../styles/Search.scss';
 
 class Search extends Component {
     constructor(props){
@@ -48,12 +49,16 @@ class Search extends Component {
 
     render(){
         return (
-        <div className="Search">
+        <div className="Search app-block">
             <div className="search-title"><h2 className="search-title-header">Full Address (Include the Town)</h2></div>
-            <input className="LocationSearch" onKeyUp={this.onKeyUp} onKeyPress={this.onKeyPress} ref={locEntry => this.locEntry = locEntry}/>
+            <div className="search-home">
+            <input className="LocationSearch" placeholder="Origin Location" onKeyUp={this.onKeyUp} onKeyPress={this.onKeyPress} ref={locEntry => this.locEntry = locEntry}/>
             <button className="SubmitLocationSearch" onClick={this.submitLocationSearch}>Submit Home</button>
-            <input className="DestinationSearch" onKeyUp={this.destOnKeyUp} ref={destEntry => this.destEntry = destEntry}/>
+            </div>
+            <div className="search-destination">
+            <input className="DestinationSearch" placeholder="Enter Destination" onKeyUp={this.destOnKeyUp} ref={destEntry => this.destEntry = destEntry}/>
             <button className="SubmitDestinationSearch" onClick={this.submitDestinationSearch} >Search Destination</button>
+            </div>
             </div>
             )
     }

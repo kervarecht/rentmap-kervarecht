@@ -54,16 +54,16 @@ class CarSearch extends Component {
 
     render(){
         return (
-            <div className="CarSearch">
+            <div className="CarSearch app-block">
                 <h2 className="car-search-header">Select Car Model for MPG Info</h2>
                 <div className="select-year-make">
                 <select className="carsearch-select" onChange={this.handleYearChange}>{this.state.years.map(year => <option value={year.toString()}>{year.toString()}</option>)}</select>
                 <select className="carsearch-select" onChange={this.handleMakeChange}>{this.state.makes.map(make => <option value={make}>{make}</option>)}</select>
+                <button className="carsearch-button" onClick={this.getCar}>Search for Model</button>
                 </div>
                 <div className="select-model">
-                <button className="carsearch-button" onClick={this.getCar}>Get Info</button>
                 <select className="carsearch-select" onChange={this.handleModelChange}>{this.state.models.map(model => <option value={model}>{model}</option>)}</select>
-                <button className="carsearch-button" onClick={this.getFuel}>Get MPG Info</button>
+                <button className="carsearch-button" onClick={this.getFuel}>Get Model MPG</button>
                 </div>
             </div>
         )

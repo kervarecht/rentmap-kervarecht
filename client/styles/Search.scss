@@ -1,0 +1,32 @@
+.Search {
+    text-align: center;
+}
+
+.search-home .search-destination {
+    display: block;
+    margin: 0;
+    width: 100%;
+    border-radius: 0.4rem;
+}
+
+input {
+    margin-top: 2px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    transition: box-shadow 0.5s;
+    &:focus {
+        outline: none;
+        box-shadow: 0.2rem 0.2rem 0.4rem #cfcfcf;
+    }
+}
+
+button {
+    width: 150px;
+    margin-left: 5px;
+    border: 1px solid;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 5px;
+}
