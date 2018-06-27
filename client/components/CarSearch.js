@@ -45,12 +45,15 @@ class CarSearch extends Component {
             console.log(models);
             self.setState({"models": models,
             "selectedModel": models[0]});
+            //React is a pain to change CSS and I couldn't get the displays to line up when empty
+            $('.select-model').css('visibility', 'visible');
         });
     }
 
     getFuel(){
         this.props.submitFuelSearch(this.state.selectedYear, this.state.selectedMake, this.state.selectedModel);
     }
+
 
     render(){
         return (

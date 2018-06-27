@@ -16,7 +16,13 @@ $text-on-secondary: #ffffff;
     width: 100%;
 }
 
+.select-model {
+    visibility: hidden;
+}
+
 select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     border: 1px solid #AAA;
     color: #555;
@@ -36,9 +42,8 @@ select {
     width: 150px;
     margin-left: 5px;
     border: 1px black;
-    display: inline;
-    vertical-align: text-bottom;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
     border-radius: 5px;
-    vertical-align: text-top;
 }
