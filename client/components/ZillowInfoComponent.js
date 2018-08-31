@@ -46,7 +46,13 @@ class ZillowInfo extends Component {
     }
 
     perWeek(distance, price){
+        console.log("Distance: " + distance + ". Price: " + price);
+        if (this.state.imperial == true){
+            return "$" + Math.round(this.inDistance(distance) * price * 100) / 160;
+        }
+        else {
         return "$" + Math.round(this.inDistance(distance) * price * 100) / 100;
+        }
     }
 
     render(){
